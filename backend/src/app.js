@@ -20,6 +20,10 @@ const {
     getSmtpUrl,
     getSmtp2Url
 } = require('./utils');
+const { localizetimeNunjucksFilter } = require('./nunjucks_filters');
+
+const nunjucksEnv = new nunjucks.Environment();
+nunjucksEnv.addFilter('localizetime', localizetimeNunjucksFilter);
 
 router.get('/v1/', (ctx) => {
     ctx.body = {
@@ -99,7 +103,7 @@ function getReadme(templatePath) {
 }
 
 function getSubject(templatePath, values) {
-    return nunjucks.renderString(
+    return nunjucksEnv.renderString(
         fs.readFileSync(
             templatePath,
             {
@@ -112,7 +116,7 @@ function getSubject(templatePath, values) {
 
 function getHtml(templatePath, values) {
     return mjml2html(
-        nunjucks.renderString(
+        nunjucksEnv.renderString(
             fs.readFileSync(
                 templatePath,
                 {
@@ -129,7 +133,7 @@ function replaceAllCIDByPreviewUrl(data, ctx) {
 }
 
 function getTxt(templatePath, values) {
-    return nunjucks.renderString(
+    return nunjucksEnv.renderString(
         fs.readFileSync(
             templatePath,
             {
@@ -282,7 +286,7 @@ module.exports = function createApp(config) {
         app.context.transporter['smtp2'].verify(function (error) {
             if (error) {
                 console.error(error);
-                console.error('Smtp2 url:', getSmtp2Url(config))
+                console.error('Smtp2 url:', getSmtp2Url(config));
                 process.exit(1);
             } else {
                 console.log('Smtp server 2 is ready to take our messages');
