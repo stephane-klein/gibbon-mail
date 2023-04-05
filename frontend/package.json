@@ -28,7 +28,7 @@
   "dependencies": {
     "@rjsf/bootstrap-4": "2.5.1",
     "@rjsf/core": "2.5.1",
-    "axios": "0.21.1",
+    "axios": "0.21.2",
     "axios-hooks": "2.6.1",
     "bootstrap": "4.6.0",
     "lodash": "4.17.21",
